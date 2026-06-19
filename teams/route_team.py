@@ -6,7 +6,7 @@ Routes each question to exactly one specialist.
 Best for: quick, targeted questions.
 """
 
-from agno.models.google import Gemini
+from agno.models.anthropic import Claude
 from agno.team import Team, TeamMode
 
 from agents import (
@@ -23,7 +23,7 @@ route_team = Team(
     id="route-team",
     name="Investment Team - Route",
     mode=TeamMode.route,
-    model=Gemini(id="gemini-3.1-pro-preview"),
+    model=Claude(id="claude-sonnet-4-6"),
     members=[
         market_analyst,
         financial_analyst,

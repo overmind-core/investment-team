@@ -8,7 +8,7 @@ Tools: YFinance.
 
 from agno.agent import Agent
 from agno.learn import LearnedKnowledgeConfig, LearningMachine, LearningMode
-from agno.models.google import Gemini
+from agno.models.anthropic import Claude
 from agno.tools.yfinance import YFinanceTools
 
 from agents.settings import team_knowledge, team_learnings
@@ -49,7 +49,7 @@ whether a stock is a sound investment.
 financial_analyst = Agent(
     id="financial-analyst",
     name="Financial Analyst",
-    model=Gemini(id="gemini-3-flash-preview"),
+    model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
     tools=[YFinanceTools()],

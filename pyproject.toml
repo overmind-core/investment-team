@@ -1,13 +1,14 @@
 [project]
-name = "investment-team"
-version = "1.0.0"
+authors         = [{ name = "Agno", email = "hello@agno.com" }]
+license-files   = ["LICENSE"]
+name            = "investment-team"
+readme          = "README.md"
 requires-python = ">=3.12,<4"
-readme = "README.md"
-license-files = ["LICENSE"]
-authors = [{ name = "Agno", email = "hello@agno.com" }]
+version         = "1.0.0"
 
 dependencies = [
   "agno",
+  "anthropic",
   "fastapi[standard]",
   "google-genai",
   "mcp",
@@ -15,36 +16,62 @@ dependencies = [
   "psycopg[binary]",
   "sqlalchemy",
   "yfinance",
+  "opentelemetry-api",
+  "opentelemetry-sdk",
+  "langgraph",
+  "opentelemetry-exporter-otlp-proto-http",
+  "opentelemetry-instrumentation-fastapi",
+  "opentelemetry-instrumentation",
+  "opentelemetry-semantic-conventions",
+  "opentelemetry-semantic-conventions-ai",
+  "wrapt",
+  "typing-extensions",
+  "packaging",
+  "opentelemetry-instrumentation-requests",
+  "opentelemetry-instrumentation-httpx",
+  "opentelemetry-instrumentation-logging",
+  "tqdm",
+  "opentelemetry-instrumentation-anthropic",
+  "opentelemetry-instrumentation-google-generativeai",
+  "opentelemetry-instrumentation-agno",
+
   # "parallel-web",  # Optional: uncomment if using ParallelTools
 ]
 
-[project.optional-dependencies]
-dev = ["mypy", "ruff"]
+  [project.optional-dependencies]
+  dev = ["mypy", "ruff"]
 
 [build-system]
-requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+requires      = ["setuptools"]
 
 [tool.setuptools.packages.find]
 include = ["agents*", "context*", "db*", "app*", "teams*", "workflows*"]
 
 [tool.ruff]
+exclude     = [".venv*"]
 line-length = 120
-exclude = [".venv*"]
 
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401", "F403"]
+  [tool.ruff.lint.per-file-ignores]
+  "__init__.py" = ["F401", "F403"]
 
 [tool.mypy]
-check_untyped_defs = true
+check_untyped_defs   = true
+exclude              = [".venv*"]
 no_implicit_optional = true
-warn_unused_configs = true
-plugins = ["pydantic.mypy"]
-exclude = [".venv*"]
+plugins              = ["pydantic.mypy"]
+warn_unused_configs  = true
 
-[[tool.mypy.overrides]]
-module = ["pgvector.*", "setuptools.*", "agno.*", "httpx.*", "yfinance.*", "google.*"]
-ignore_missing_imports = true
+  [[tool.mypy.overrides]]
+  ignore_missing_imports = true
+  module = [
+    "pgvector.*",
+    "setuptools.*",
+    "agno.*",
+    "httpx.*",
+    "yfinance.*",
+    "google.*",
+  ]
 
 [tool.uv.pip]
 no-annotate = true

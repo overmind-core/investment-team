@@ -3,12 +3,12 @@ Committee Chair
 ---------------
 
 Final decision-maker and capital allocator.
-Model: Gemini 3.1 Pro. Tools: None.
+Model: Claude Sonnet 4.6. Tools: None.
 """
 
 from agno.agent import Agent
 from agno.learn import LearnedKnowledgeConfig, LearningMachine, LearningMode
-from agno.models.google import Gemini
+from agno.models.anthropic import Claude
 
 from agents.settings import team_knowledge, team_learnings
 from context import COMMITTEE_CONTEXT
@@ -56,7 +56,7 @@ from all analysts into clear, actionable decisions.
 committee_chair = Agent(
     id="committee-chair",
     name="Committee Chair",
-    model=Gemini(id="gemini-3.1-pro-preview"),
+    model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
     knowledge=team_knowledge,

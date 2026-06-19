@@ -10,7 +10,7 @@ Run:
 
 import os
 from pathlib import Path
-
+from traceloop.sdk import Traceloop
 from agno.os import AgentOS
 
 from agents import (
@@ -49,6 +49,18 @@ agent_os = AgentOS(
 )
 
 app = agent_os.get_app()
+
+
+Traceloop.init(app_name="agno_agent", api_endpoint="http://api.overmind-dev.orb.local:8000/api", api_key="ovr_6LvPr3GRa_e8hOMtyblENFQImuLBZ5J9zBQnN_mfIRc")
+
+# init(
+#     overmind_api_key="ovr_6LvPr3GRa_e8hOMtyblENFQImuLBZ5J9zBQnN_mfIRc",
+#     overmind_base_url="http://api.overmind-dev.orb.local:8000",
+#     service_name="my-new-service",
+#     environment="local",
+#     providers=["google", "agno", "anthropic"],
+# )
+
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "8000"))

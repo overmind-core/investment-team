@@ -7,7 +7,7 @@ Tools: FileTools (read + save to memos/).
 """
 
 from agno.agent import Agent
-from agno.models.google import Gemini
+from agno.models.anthropic import Claude
 from agno.tools.file import FileTools
 
 from agents.settings import MEMOS_DIR
@@ -62,7 +62,7 @@ Examples: `nvda_2026_q1_buy.md`, `aapl_2026_q1_hold.md`, `tsla_2026_q1_pass.md`
 memo_writer = Agent(
     id="memo-writer",
     name="Memo Writer",
-    model=Gemini(id="gemini-3-flash-preview"),
+    model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
     tools=[

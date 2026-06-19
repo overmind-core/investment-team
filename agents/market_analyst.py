@@ -10,14 +10,14 @@ from os import getenv
 
 from agno.agent import Agent
 from agno.learn import LearnedKnowledgeConfig, LearningMachine, LearningMode
-from agno.models.google import Gemini
+from agno.models.anthropic import Claude
 from agno.tools.mcp import MCPTools
 from agno.tools.yfinance import YFinanceTools
 
 from agents.settings import EXA_MCP_URL, team_knowledge, team_learnings
 from context import COMMITTEE_CONTEXT
 from db import get_postgres_db
-
+# from opentelemetry.overmind.prompt import PromptString
 agent_db = get_postgres_db()
 
 instructions = f"""\
@@ -59,7 +59,7 @@ if getenv("PARALLEL_API_KEY"):
 market_analyst = Agent(
     id="market-analyst",
     name="Market Analyst",
-    model=Gemini(id="gemini-3-flash-preview"),
+    model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
     tools=tools,

@@ -28,6 +28,9 @@ COPY --chown=app:app . .
 # ---------------------------------------------------------------------------
 RUN chmod +x /app/scripts/entrypoint.sh
 
+RUN uv pip install agno openai traceloop-sdk anthropic --system
+# overmind
+
 USER app
 
 EXPOSE 8000

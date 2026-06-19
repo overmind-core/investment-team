@@ -10,7 +10,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - investment-team
 
@@ -23,7 +23,7 @@ services:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8004:8000"
     volumes:
       # Hot-reload: mount source code
       - .:/app
@@ -43,6 +43,7 @@ services:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - EXA_API_KEY=${EXA_API_KEY}
       - PARALLEL_API_KEY=${PARALLEL_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
     depends_on:
       - investment-team-db
     networks:

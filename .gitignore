@@ -62,3 +62,8 @@ tmp
 
 # Optional: local PyPI creds (uncomment if you ever create it)
 # .pypirc
+app/dataset.jsonl
+memos/memos/aapl_2026_q1_buy.md
+memos/memos/nvda_2026_q1_buy_update.md
+overmind/
+.cursor/

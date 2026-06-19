@@ -2,12 +2,12 @@
 Coordinate Team
 ---------------
 
-Chair (Gemini Pro) dynamically orchestrates analysts based on the question.
+Chair (Claude Sonnet 4.6) dynamically orchestrates analysts based on the question.
 Best for: open-ended investment questions.
 """
 
 from agno.learn import LearnedKnowledgeConfig, LearningMachine, LearningMode
-from agno.models.google import Gemini
+from agno.models.anthropic import Claude
 from agno.team import Team, TeamMode
 
 from agents import (
@@ -24,7 +24,7 @@ coordinate_team = Team(
     id="coordinate-team",
     name="Investment Team - Coordinate",
     mode=TeamMode.coordinate,
-    model=Gemini(id="gemini-3.1-pro-preview"),
+    model=Claude(id="claude-sonnet-4-6"),
     members=[
         market_analyst,
         financial_analyst,

@@ -17,7 +17,7 @@ AgentOS (app/main.py)
 │   ├── Risk Officer            — downside scenarios, portfolio exposure (YFinance)
 │   ├── Knowledge Agent         — research library (RAG) + memo archive (FileTools)
 │   ├── Memo Writer             — synthesizes analysis into formal memos (FileTools)
-│   └── Committee Chair         — final decisions, capital allocation (Gemini 3.1 Pro)
+│   └── Committee Chair         — final decisions, capital allocation (Claude Sonnet 4.6)
 │
 ├── Teams (4 architectures)
 │   ├── Coordinate Team         — Chair orchestrates analysts dynamically
@@ -37,14 +37,14 @@ AgentOS (app/main.py)
 ```
 
 All specialist agents use:
-- Gemini 3 Flash model (`gemini-3-flash-preview`)
+- Claude Sonnet 4.6 model (`claude-sonnet-4-6`)
 - PostgreSQL database (pgvector) for persistence
 - Committee context (Layer 1) in system prompt
 - Shared knowledge base (Layer 2) for RAG
 - Shared learnings (institutional learning)
 
 Committee Chair and team leaders use:
-- Gemini 3.1 Pro model (`gemini-3.1-pro-preview`)
+- Claude Sonnet 4.6 model (`claude-sonnet-4-6`)
 
 ## Key Files
 
@@ -60,7 +60,7 @@ Committee Chair and team leaders use:
 | `agents/risk_officer.py` | Risk Officer — YFinance |
 | `agents/knowledge_agent.py` | Knowledge Agent — RAG + FileTools |
 | `agents/memo_writer.py` | Memo Writer — FileTools (save) |
-| `agents/committee_chair.py` | Committee Chair — Gemini 3.1 Pro, no tools |
+| `agents/committee_chair.py` | Committee Chair — Claude Sonnet 4.6, no tools |
 | `teams/coordinate_team.py` | Coordinate team (dynamic orchestration) |
 | `teams/route_team.py` | Route team (single dispatch) |
 | `teams/broadcast_team.py` | Broadcast team (parallel evaluation) |
@@ -98,7 +98,7 @@ All agents follow this structure:
 
 ```python
 from agno.agent import Agent
-from agno.models.google import Gemini
+from agno.models.anthropic import Claude
 from agno.learn import LearningMachine, LearnedKnowledgeConfig, LearningMode
 
 from context import COMMITTEE_CONTEXT
@@ -121,7 +121,7 @@ You are the [Role] on a $10M investment team.
 my_agent = Agent(
     id="my-agent",
     name="My Agent",
-    model=Gemini(id="gemini-3-flash-preview"),
+    model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
     tools=[...],
@@ -146,7 +146,7 @@ my_agent = Agent(
 
 1. **Never duplicate knowledge instances** — always import from `agents.settings`
 2. **All instructions include `COMMITTEE_CONTEXT`** via f-string (Layer 1)
-3. **Gemini Pro for Chair/team leaders, Gemini Flash for specialists**
+3. **Claude Sonnet 4.6 for all agents and team leaders**
 4. **Memos = files (FileTools), Research = vectors (PgVector)** — never mix
 5. **`committee_chair` is NOT a member** of Coordinate/Broadcast/Task teams (the team `model=` acts as chair). It IS a member of Route team and the final Workflow step.
 6. **No learning config** on: Memo Writer, Committee Chair, Knowledge Agent, Route team
@@ -217,7 +217,8 @@ python -m app.load_knowledge --recreate  # Drop and reload
 ## Environment Variables
 
 Required:
-- `GOOGLE_API_KEY` — for Gemini models and embeddings
+- `ANTHROPIC_API_KEY` — for Claude models
+- `GOOGLE_API_KEY` — for Gemini embeddings
 - `EXA_API_KEY` — for Exa web search
 
 Optional:

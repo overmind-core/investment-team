@@ -8,7 +8,7 @@ Team librarian with two retrieval modes:
 """
 
 from agno.agent import Agent
-from agno.models.google import Gemini
+from agno.models.anthropic import Claude
 from agno.tools.file import FileTools
 
 from agents.settings import MEMOS_DIR, team_knowledge
@@ -57,7 +57,7 @@ read in full — never summarize from fragments. Good for questions like:
 knowledge_agent = Agent(
     id="knowledge-agent",
     name="Knowledge Agent",
-    model=Gemini(id="gemini-3-flash-preview"),
+    model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
     tools=[

@@ -9,6 +9,7 @@
 #    Prerequisites:
 #      - Railway CLI installed
 #      - Logged in via `railway login`
+#      - ANTHROPIC_API_KEY set in environment
 #      - GOOGLE_API_KEY set in environment
 #
 ############################################################################
@@ -47,6 +48,11 @@ if ! command -v railway &> /dev/null; then
     exit 1
 fi
 
+if [[ -z "$ANTHROPIC_API_KEY" ]]; then
+    echo "ANTHROPIC_API_KEY not set."
+    exit 1
+fi
+
 if [[ -z "$GOOGLE_API_KEY" ]]; then
     echo "GOOGLE_API_KEY not set."
     exit 1
@@ -76,6 +82,7 @@ railway add --service investment-team \
     --variables 'DB_DATABASE=${{pgvector.PGDATABASE}}' \
     --variables "DB_DRIVER=postgresql+psycopg" \
     --variables "WAIT_FOR_DB=True" \
+    --variables "ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}" \
     --variables "GOOGLE_API_KEY=${GOOGLE_API_KEY}" \
     --variables "EXA_API_KEY=${EXA_API_KEY}" \
     --variables "PORT=8000"

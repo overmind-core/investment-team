@@ -15,7 +15,7 @@ def build_db_url() -> str:
     user = getenv("DB_USER", "ai")
     password = quote(getenv("DB_PASS", "ai"), safe="")
     host = getenv("DB_HOST", "localhost")
-    port = getenv("DB_PORT", "5432")
+    port = getenv("DB_PORT", "5433")
     database = getenv("DB_DATABASE", "ai")
 
     return f"{driver}://{user}:{password}@{host}:{port}/{database}"

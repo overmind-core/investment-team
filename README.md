@@ -1,6 +1,6 @@
 # Multi-Agent Investment Team
 
-Multi-agent investment team powered by Agno and Gemini — 7 AI analysts collaborate across 5 architectures to deploy a $10M equity portfolio
+Multi-agent investment team powered by Agno and Claude — 7 AI analysts collaborate across 5 architectures to deploy a $10M equity portfolio
 
 ## Architecture
 
@@ -13,7 +13,7 @@ AgentOS
 │   ├── Risk Officer          ── YFinance + mandate enforcement
 │   ├── Knowledge Agent       ── RAG search + memo file navigation
 │   ├── Memo Writer           ── Writes investment memos to disk
-│   └── Committee Chair       ── Final decision-maker (Gemini 3.1 Pro)
+│   └── Committee Chair       ── Final decision-maker (Claude Sonnet 4.6)
 │
 ├── Teams (4)
 │   ├── Coordinate Team       ── Dynamic multi-agent orchestration
@@ -107,13 +107,13 @@ What does our research say about semiconductors?
 
 | Agent | Model | Tools | Purpose |
 |-------|-------|-------|---------|
-| Market Analyst | Gemini 3 Flash | Exa MCP, YFinance | Macro environment, news, market conditions |
-| Financial Analyst | Gemini 3 Flash | YFinance | Valuation, fundamentals, analyst estimates |
-| Technical Analyst | Gemini 3 Flash | YFinance | Price action, indicators, support/resistance |
-| Risk Officer | Gemini 3 Flash | YFinance | Position sizing, mandate compliance, risk limits |
-| Knowledge Agent | Gemini 3 Flash | FileTools (read-only) | RAG over research library + memo file browsing |
-| Memo Writer | Gemini 3 Flash | FileTools (read/write) | Drafts and saves standardized investment memos |
-| Committee Chair | Gemini 3.1 Pro | None | Final BUY/HOLD/PASS decisions with conviction scores |
+| Market Analyst | Claude Sonnet 4.6 | Exa MCP, YFinance | Macro environment, news, market conditions |
+| Financial Analyst | Claude Sonnet 4.6 | YFinance | Valuation, fundamentals, analyst estimates |
+| Technical Analyst | Claude Sonnet 4.6 | YFinance | Price action, indicators, support/resistance |
+| Risk Officer | Claude Sonnet 4.6 | YFinance | Position sizing, mandate compliance, risk limits |
+| Knowledge Agent | Claude Sonnet 4.6 | FileTools (read-only) | RAG over research library + memo file browsing |
+| Memo Writer | Claude Sonnet 4.6 | FileTools (read/write) | Drafts and saves standardized investment memos |
+| Committee Chair | Claude Sonnet 4.6 | None | Final BUY/HOLD/PASS decisions with conviction scores |
 
 ## Teams
 
@@ -255,7 +255,8 @@ python -m app.load_knowledge --recreate # Drop and reload all
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `GOOGLE_API_KEY` | Yes | — | Gemini models + embeddings |
+| `ANTHROPIC_API_KEY` | Yes | — | Claude models |
+| `GOOGLE_API_KEY` | Yes | — | Gemini embeddings |
 | `EXA_API_KEY` | Yes | — | Web search for Market Analyst |
 | `PARALLEL_API_KEY` | No | — | ParallelTools for Market Analyst |
 | `RUNTIME_ENV` | No | `prd` | Set to `dev` for auto-reload |
