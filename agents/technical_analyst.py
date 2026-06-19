@@ -7,11 +7,11 @@ Tools: YFinance.
 """
 
 from agno.agent import Agent
-from agno.learn import LearnedKnowledgeConfig, LearningMachine, LearningMode
+from agno.learn import LearningMachine
 from agno.models.anthropic import Claude
-from agno.tools.yfinance import YFinanceTools
 
 from agents.settings import team_knowledge, team_learnings
+from agents.tracing import make_search_knowledge, setup_traced_learning, traced_yfinance_tools
 from context import COMMITTEE_CONTEXT
 from db import get_postgres_db
 
@@ -46,21 +46,21 @@ exit points for investments.
 5. Provide your assessment with a clear technical signal.
 """
 
+learned_store, search_learnings, save_learning = setup_traced_learning(team_learnings)
+search_knowledge = make_search_knowledge(team_knowledge)
+
 technical_analyst = Agent(
     id="technical-analyst",
     name="Technical Analyst",
     model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
-    tools=[YFinanceTools()],
+    tools=[traced_yfinance_tools(), search_knowledge, search_learnings, save_learning],
     knowledge=team_knowledge,
-    search_knowledge=True,
+    search_knowledge=False,
     learning=LearningMachine(
         knowledge=team_learnings,
-        learned_knowledge=LearnedKnowledgeConfig(
-            mode=LearningMode.AGENTIC,
-            namespace="global",
-        ),
+        learned_knowledge=learned_store,
     ),
     add_datetime_to_context=True,
     add_history_to_context=True,

@@ -9,15 +9,19 @@ Tools: Exa MCP (web search) + YFinance (market data).
 from os import getenv
 
 from agno.agent import Agent
-from agno.learn import LearnedKnowledgeConfig, LearningMachine, LearningMode
+from agno.learn import LearningMachine
 from agno.models.anthropic import Claude
-from agno.tools.mcp import MCPTools
-from agno.tools.yfinance import YFinanceTools
 
 from agents.settings import EXA_MCP_URL, team_knowledge, team_learnings
+from agents.tracing import (
+    TracedMCPTools,
+    make_search_knowledge,
+    setup_traced_learning,
+    traced_yfinance_tools,
+)
 from context import COMMITTEE_CONTEXT
 from db import get_postgres_db
-# from opentelemetry.overmind.prompt import PromptString
+
 agent_db = get_postgres_db()
 
 instructions = f"""\
@@ -48,7 +52,10 @@ that could impact investment decisions.
 5. Provide your assessment with a clear market context score.
 """
 
-tools: list = [MCPTools(url=EXA_MCP_URL), YFinanceTools()]
+learned_store, search_learnings, save_learning = setup_traced_learning(team_learnings)
+search_knowledge = make_search_knowledge(team_knowledge)
+
+tools: list = [TracedMCPTools(url=EXA_MCP_URL), traced_yfinance_tools()]
 
 # Optional: add ParallelTools if PARALLEL_API_KEY is set
 if getenv("PARALLEL_API_KEY"):
@@ -62,15 +69,12 @@ market_analyst = Agent(
     model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
-    tools=tools,
+    tools=[*tools, search_knowledge, search_learnings, save_learning],
     knowledge=team_knowledge,
-    search_knowledge=True,
+    search_knowledge=False,
     learning=LearningMachine(
         knowledge=team_learnings,
-        learned_knowledge=LearnedKnowledgeConfig(
-            mode=LearningMode.AGENTIC,
-            namespace="global",
-        ),
+        learned_knowledge=learned_store,
     ),
     add_datetime_to_context=True,
     add_history_to_context=True,

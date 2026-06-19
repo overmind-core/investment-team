@@ -7,10 +7,11 @@ Model: Claude Sonnet 4.6. Tools: None.
 """
 
 from agno.agent import Agent
-from agno.learn import LearnedKnowledgeConfig, LearningMachine, LearningMode
+from agno.learn import LearningMachine
 from agno.models.anthropic import Claude
 
 from agents.settings import team_knowledge, team_learnings
+from agents.tracing import make_search_knowledge, setup_traced_learning
 from context import COMMITTEE_CONTEXT
 from db import get_postgres_db
 
@@ -53,20 +54,21 @@ from all analysts into clear, actionable decisions.
 5. Summarize your rationale concisely.
 """
 
+learned_store, search_learnings, save_learning = setup_traced_learning(team_learnings)
+search_knowledge = make_search_knowledge(team_knowledge)
+
 committee_chair = Agent(
     id="committee-chair",
     name="Committee Chair",
     model=Claude(id="claude-sonnet-4-6"),
     db=agent_db,
     instructions=instructions,
+    tools=[search_knowledge, search_learnings, save_learning],
     knowledge=team_knowledge,
-    search_knowledge=True,
+    search_knowledge=False,
     learning=LearningMachine(
         knowledge=team_learnings,
-        learned_knowledge=LearnedKnowledgeConfig(
-            mode=LearningMode.AGENTIC,
-            namespace="global",
-        ),
+        learned_knowledge=learned_store,
     ),
     add_datetime_to_context=True,
     add_history_to_context=True,

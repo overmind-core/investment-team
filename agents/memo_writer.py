@@ -8,9 +8,9 @@ Tools: FileTools (read + save to memos/).
 
 from agno.agent import Agent
 from agno.models.anthropic import Claude
-from agno.tools.file import FileTools
 
 from agents.settings import MEMOS_DIR
+from agents.tracing import TracedFileTools
 from context import COMMITTEE_CONTEXT
 from db import get_postgres_db
 
@@ -66,7 +66,7 @@ memo_writer = Agent(
     db=agent_db,
     instructions=instructions,
     tools=[
-        FileTools(
+        TracedFileTools(
             base_dir=MEMOS_DIR,
             enable_save_file=True,
             enable_read_file=True,

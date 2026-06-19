@@ -22,6 +22,7 @@ from agents import (
     risk_officer,
     technical_analyst,
 )
+from agents.tracing import instrument_agent_entrypoints
 from db import get_postgres_db
 from teams import broadcast_team, coordinate_team, route_team, task_team
 from workflows import investment_workflow
@@ -46,6 +47,18 @@ agent_os = AgentOS(
     teams=[coordinate_team, route_team, broadcast_team, task_team],
     workflows=[investment_workflow],
     config=str(Path(__file__).parent / "config.yaml"),
+)
+
+instrument_agent_entrypoints(
+    [
+        (market_analyst, "Market Analyst"),
+        (financial_analyst, "Financial Analyst"),
+        (technical_analyst, "Technical Analyst"),
+        (risk_officer, "Risk Officer"),
+        (knowledge_agent, "Knowledge Agent"),
+        (memo_writer, "Memo Writer"),
+        (committee_chair, "Committee Chair"),
+    ]
 )
 
 app = agent_os.get_app()
